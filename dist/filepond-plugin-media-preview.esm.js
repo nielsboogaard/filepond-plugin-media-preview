@@ -1,5 +1,5 @@
 /*!
- * FilePondPluginMediaPreview 1.0.0
+ * FilePondPluginMediaPreview 1.0.2
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit undefined for details.
  */

@@ -14,6 +14,9 @@
     // this seems to prevent Chrome from redrawing this layer constantly
     background: rgba(0, 0, 0, 0.01);
 
+    // allow the media preview to do it's job, even if FilePond is set to disabled.
+    pointer-events: auto;
+
     &:before {
         content:" ";
         position: absolute;
