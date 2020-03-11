@@ -148,7 +148,7 @@
       name: 'media-preview',
       tag: 'div',
       ignoreRect: true,
-      create: ({ root, props }) => {
+      create: ({ root, props, fixedVideoHeight = 235 }) => {
         const { id } = props; // get item
 
         const item = root.query('GET_ITEM', {
@@ -157,6 +157,9 @@
         let tagName = isPreviewableAudio(item.file) ? 'audio' : 'video';
         root.ref.media = document.createElement(tagName);
         root.ref.media.setAttribute('controls', true);
+        const isFixedVideoHeight = root.query('GET_FIXED_VIDEO_HEIGHT');
+        isFixedVideoHeight &&
+          root.ref.media.setAttribute('height', `${fixedVideoHeight}px`);
         root.element.appendChild(root.ref.media);
 
         if (isPreviewableAudio(item.file)) {
@@ -178,7 +181,7 @@
         }
       },
       write: _.utils.createRoute({
-        DID_MEDIA_PREVIEW_LOAD: ({ root, props }) => {
+        DID_MEDIA_PREVIEW_LOAD: ({ root, props, fixedVideoHeight = 235 }) => {
           const { id } = props; // get item
 
           const item = root.query('GET_ITEM', {
@@ -201,11 +204,13 @@
             () => {
               let height = 75; // default height for audio panel
 
-              if (isPreviewableVideo(item.file)) {
+              const isFixedVideoHeight = root.query('GET_FIXED_VIDEO_HEIGHT');
+
+              if (isPreviewableVideo(item.file) && !isFixedVideoHeight) {
                 let containerWidth = root.ref.media.offsetWidth;
                 let factor = root.ref.media.videoWidth / containerWidth;
                 height = root.ref.media.videoHeight / factor;
-              }
+              } else height = fixedVideoHeight;
 
               root.dispatch('DID_UPDATE_PANEL_HEIGHT', {
                 id: props.id,
@@ -318,7 +323,8 @@
     return {
       options: {
         allowVideoPreview: [true, Type.BOOLEAN],
-        allowAudioPreview: [true, Type.BOOLEAN]
+        allowAudioPreview: [true, Type.BOOLEAN],
+        fixedVideoHeight: [true, Type.BOOLEAN]
       }
     };
   }; // fire pluginloaded event if running in browser, this allows registering the plugin when using async script tags
