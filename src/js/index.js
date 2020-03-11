@@ -58,7 +58,8 @@ const plugin = fpAPI => {
     return {
         options: {
             allowVideoPreview: [true, Type.BOOLEAN],
-            allowAudioPreview: [true, Type.BOOLEAN]
+            allowAudioPreview: [true, Type.BOOLEAN],
+            fixedVideoHeight: [true, Type.BOOLEAN],
         }
     };
 };
