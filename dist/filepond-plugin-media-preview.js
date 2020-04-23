@@ -1,24 +1,24 @@
 /*!
- * FilePondPluginMediaPreview 1.0.4
+ * FilePondPluginMediaPreview 1.0.5
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit undefined for details.
  */
 
 /* eslint-disable */
 
-(function(global, factory) {
+(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined'
     ? (module.exports = factory())
     : typeof define === 'function' && define.amd
     ? define(factory)
     : ((global = global || self),
       (global.FilePondPluginMediaPreview = factory()));
-})(this, function() {
+})(this, function () {
   'use strict';
 
-  const isPreviewableVideo = file => /^video/.test(file.type);
+  const isPreviewableVideo = (file) => /^video/.test(file.type);
 
-  const isPreviewableAudio = file => /^audio/.test(file.type);
+  const isPreviewableAudio = (file) => /^audio/.test(file.type);
 
   ('use strict');
 
@@ -143,7 +143,7 @@
     }
   }
 
-  const createMediaView = _ =>
+  const createMediaView = (_) =>
     _.utils.createView({
       name: 'media-preview',
       tag: 'div',
@@ -152,7 +152,7 @@
         const { id } = props; // get item
 
         const item = root.query('GET_ITEM', {
-          id: props.id
+          id: props.id,
         });
         let tagName = isPreviewableAudio(item.file) ? 'audio' : 'video';
         root.ref.media = document.createElement(tagName);
@@ -182,12 +182,12 @@
           const { id } = props; // get item
 
           const item = root.query('GET_ITEM', {
-            id: props.id
+            id: props.id,
           });
           if (!item) return;
           let URL = window.URL || window.webkitURL;
           let blob = new Blob([item.file], {
-            type: item.file.type
+            type: item.file.type,
           });
           root.ref.media.type = item.file.type;
           root.ref.media.src = URL.createObjectURL(blob); // create audio player in case of audio file
@@ -209,16 +209,16 @@
 
               root.dispatch('DID_UPDATE_PANEL_HEIGHT', {
                 id: props.id,
-                height: height
+                height: height,
               });
             },
             false
           );
-        }
-      })
+        },
+      }),
     });
 
-  const createMediaWrapperView = _ => {
+  const createMediaWrapperView = (_) => {
     /**
      * Write handler for when preview container has been created
      */
@@ -228,7 +228,7 @@
       if (!item) return; // the preview is now ready to be drawn
 
       root.dispatch('DID_MEDIA_PREVIEW_LOAD', {
-        id
+        id,
       });
     };
     /**
@@ -240,7 +240,7 @@
 
       root.ref.media = root.appendChildView(
         root.createChildView(media, {
-          id: props.id
+          id: props.id,
         })
       );
     };
@@ -250,8 +250,8 @@
       create,
       write: _.utils.createRoute({
         // media preview stated
-        DID_MEDIA_PREVIEW_CONTAINER_CREATE: didCreatePreviewContainer
-      })
+        DID_MEDIA_PREVIEW_CONTAINER_CREATE: didCreatePreviewContainer,
+      }),
     });
   };
 
@@ -259,12 +259,12 @@
    * Media Preview Plugin
    */
 
-  const plugin = fpAPI => {
+  const plugin = (fpAPI) => {
     const { addFilter, utils } = fpAPI;
     const { Type, createRoute } = utils;
     const mediaWrapperView = createMediaWrapperView(fpAPI); // called for each view that is created right after the 'create' method
 
-    addFilter('CREATE_VIEW', viewAPI => {
+    addFilter('CREATE_VIEW', (viewAPI) => {
       // get reference to created view
       const { is, view, query } = viewAPI; // only hook up to item view
 
@@ -286,19 +286,19 @@
 
         root.ref.mediaPreview = view.appendChildView(
           view.createChildView(mediaWrapperView, {
-            id
+            id,
           })
         ); // now ready
 
         root.dispatch('DID_MEDIA_PREVIEW_CONTAINER_CREATE', {
-          id
+          id,
         });
       }; // start writing
 
       view.registerWriter(
         createRoute(
           {
-            DID_LOAD_ITEM: didLoadItem
+            DID_LOAD_ITEM: didLoadItem,
           },
           ({ root, props }) => {
             const { id } = props;
@@ -318,8 +318,8 @@
     return {
       options: {
         allowVideoPreview: [true, Type.BOOLEAN],
-        allowAudioPreview: [true, Type.BOOLEAN]
-      }
+        allowAudioPreview: [true, Type.BOOLEAN],
+      },
     };
   }; // fire pluginloaded event if running in browser, this allows registering the plugin when using async script tags
 
@@ -329,7 +329,7 @@
   if (isBrowser) {
     document.dispatchEvent(
       new CustomEvent('FilePond:pluginloaded', {
-        detail: plugin
+        detail: plugin,
       })
     );
   }

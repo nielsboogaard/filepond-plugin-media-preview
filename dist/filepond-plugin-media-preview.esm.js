@@ -1,14 +1,14 @@
 /*!
- * FilePondPluginMediaPreview 1.0.4
+ * FilePondPluginMediaPreview 1.0.5
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit undefined for details.
  */
 
 /* eslint-disable */
 
-const isPreviewableVideo = file => /^video/.test(file.type);
+const isPreviewableVideo = (file) => /^video/.test(file.type);
 
-const isPreviewableAudio = file => /^audio/.test(file.type);
+const isPreviewableAudio = (file) => /^audio/.test(file.type);
 
 ('use strict');
 
@@ -126,7 +126,7 @@ class AudioPlayer {
   }
 }
 
-const createMediaView = _ =>
+const createMediaView = (_) =>
   _.utils.createView({
     name: 'media-preview',
     tag: 'div',
@@ -195,16 +195,16 @@ const createMediaView = _ =>
 
             root.dispatch('DID_UPDATE_PANEL_HEIGHT', {
               id: props.id,
-              height: height
+              height: height,
             });
           },
           false
         );
-      }
-    })
+      },
+    }),
   });
 
-const createMediaWrapperView = _ => {
+const createMediaWrapperView = (_) => {
   /**
    * Write handler for when preview container has been created
    */
@@ -215,7 +215,7 @@ const createMediaWrapperView = _ => {
 
     // the preview is now ready to be drawn
     root.dispatch('DID_MEDIA_PREVIEW_LOAD', {
-      id
+      id,
     });
   };
 
@@ -228,7 +228,7 @@ const createMediaWrapperView = _ => {
     // append media presenter
     root.ref.media = root.appendChildView(
       root.createChildView(media, {
-        id: props.id
+        id: props.id,
       })
     );
   };
@@ -238,21 +238,21 @@ const createMediaWrapperView = _ => {
     create,
     write: _.utils.createRoute({
       // media preview stated
-      DID_MEDIA_PREVIEW_CONTAINER_CREATE: didCreatePreviewContainer
-    })
+      DID_MEDIA_PREVIEW_CONTAINER_CREATE: didCreatePreviewContainer,
+    }),
   });
 };
 
 /**
  * Media Preview Plugin
  */
-const plugin = fpAPI => {
+const plugin = (fpAPI) => {
   const { addFilter, utils } = fpAPI;
   const { Type, createRoute } = utils;
   const mediaWrapperView = createMediaWrapperView(fpAPI);
 
   // called for each view that is created right after the 'create' method
-  addFilter('CREATE_VIEW', viewAPI => {
+  addFilter('CREATE_VIEW', (viewAPI) => {
     // get reference to created view
     const { is, view, query } = viewAPI;
 
@@ -287,7 +287,7 @@ const plugin = fpAPI => {
     view.registerWriter(
       createRoute(
         {
-          DID_LOAD_ITEM: didLoadItem
+          DID_LOAD_ITEM: didLoadItem,
         },
         ({ root, props }) => {
           const { id } = props;
@@ -309,8 +309,8 @@ const plugin = fpAPI => {
   return {
     options: {
       allowVideoPreview: [true, Type.BOOLEAN],
-      allowAudioPreview: [true, Type.BOOLEAN]
-    }
+      allowAudioPreview: [true, Type.BOOLEAN],
+    },
   };
 };
 
