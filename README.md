@@ -38,6 +38,11 @@ document.body.appendChild(pond.element);
 ```
  The preview will become active when uploading an video or audio file.
 
+## Default styles
+Be sure to include this lib's styles, by importing the minified css.
+```js
+import 'filepond-plugin-media-preview/dist/filepond-plugin-media-preview.min.css';
+```
 
 ## Demo
 [View the demo](https://nielsboogaard.github.io/filepond-plugin-media-preview/)
