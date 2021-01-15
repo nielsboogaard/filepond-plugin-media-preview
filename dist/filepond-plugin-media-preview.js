@@ -191,7 +191,8 @@
             type: item.file.type,
           });
           root.ref.media.type = item.file.type;
-          root.ref.media.src = URL.createObjectURL(blob); // create audio player in case of audio file
+          root.ref.media.src =
+            (item.file.mock && item.file.url) || URL.createObjectURL(blob); // create audio player in case of audio file
 
           if (isPreviewableAudio(item.file)) {
             new AudioPlayer(root.ref.media, root.ref.audio);

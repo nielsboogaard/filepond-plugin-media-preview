@@ -175,7 +175,8 @@ const createMediaView = (_) =>
         let blob = new Blob([item.file], { type: item.file.type });
 
         root.ref.media.type = item.file.type;
-        root.ref.media.src = URL.createObjectURL(blob);
+        root.ref.media.src =
+          (item.file.mock && item.file.url) || URL.createObjectURL(blob);
 
         // create audio player in case of audio file
         if (isPreviewableAudio(item.file)) {
