@@ -41,7 +41,25 @@
         const inputElement = document.querySelector('input[type="file"]');
 
         // Create the FilePond instance
-        const pond = FilePond.create(inputElement);
+        const pond = FilePond.create(inputElement, {
+            files: [
+                {
+                    source: 'source',
+                    options: {
+                        type: 'local',
+                        // Mock file information
+                        file: {
+                            name: 'BigBuckBunny.mp4',
+                            size: 158334976,
+                            type: 'video/mp4',
+                            url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                            mock: true, // Should be set to true to avoid full file preloading before showing preview
+                        }
+                    }
+                }
+            ]
+        });
+        
         pond.addFile('./goodmorning.mp4');
         pond.addFile('./woodpecker.mp3');
     </script>
