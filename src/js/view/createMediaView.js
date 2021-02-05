@@ -8,7 +8,6 @@ export const createMediaView = _ =>
         tag: 'div',
         ignoreRect: true,
         create: ({ root, props }) => {
-            const { id } = props;
 
             // get item
             const item = root.query('GET_ITEM', { id: props.id });
@@ -41,8 +40,6 @@ export const createMediaView = _ =>
         },
         write: _.utils.createRoute({
             DID_MEDIA_PREVIEW_LOAD: ({ root, props }) => {
-                const {id} = props;
-
                 // get item
                 const item = root.query('GET_ITEM', {id: props.id});
                 if (!item) return;
