@@ -9,6 +9,7 @@ const plugin = fpAPI => {
 
     const { addFilter, utils } = fpAPI;
     const { Type, createRoute } = utils;
+
     const mediaWrapperView = createMediaWrapperView(fpAPI);
 
     // called for each view that is created right after the 'create' method
@@ -62,7 +63,8 @@ const plugin = fpAPI => {
     return {
         options: {
             allowVideoPreview: [true, Type.BOOLEAN],
-            allowAudioPreview: [true, Type.BOOLEAN]
+            allowAudioPreview: [true, Type.BOOLEAN],
+            mediaElementAttributes: [{ controls: true }, Type.OBJECT]
         }
     };
 };
