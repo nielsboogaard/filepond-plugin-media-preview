@@ -132,14 +132,26 @@ const createMediaView = (_) =>
     tag: 'div',
     ignoreRect: true,
     create: ({ root, props }) => {
-      const { id } = props;
+      const attributes = root.query('GET_MEDIA_ELEMENT_ATTRIBUTES');
+
+      const attrsList = Object.keys(attributes);
+
+      console.log({ attributes });
 
       // get item
       const item = root.query('GET_ITEM', { id: props.id });
       let tagName = isPreviewableAudio(item.file) ? 'audio' : 'video';
 
       root.ref.media = document.createElement(tagName);
-      root.ref.media.setAttribute('controls', true);
+
+      attrsList.forEach((attribute) => {
+        // nulls and false attributes won't be passed
+        // as soon as text is considered as truthy value
+        if (!attributes[attribute]) return;
+
+        root.ref.media.setAttribute(attribute, attributes[attribute]);
+      });
+
       root.element.appendChild(root.ref.media);
 
       if (isPreviewableAudio(item.file)) {
@@ -165,8 +177,6 @@ const createMediaView = (_) =>
     },
     write: _.utils.createRoute({
       DID_MEDIA_PREVIEW_LOAD: ({ root, props }) => {
-        const { id } = props;
-
         // get item
         const item = root.query('GET_ITEM', { id: props.id });
         if (!item) return;
@@ -250,6 +260,7 @@ const createMediaWrapperView = (_) => {
 const plugin = (fpAPI) => {
   const { addFilter, utils } = fpAPI;
   const { Type, createRoute } = utils;
+
   const mediaWrapperView = createMediaWrapperView(fpAPI);
 
   // called for each view that is created right after the 'create' method
@@ -311,6 +322,7 @@ const plugin = (fpAPI) => {
     options: {
       allowVideoPreview: [true, Type.BOOLEAN],
       allowAudioPreview: [true, Type.BOOLEAN],
+      mediaElementAttributes: [{ controls: true }, Type.OBJECT],
     },
   };
 };
