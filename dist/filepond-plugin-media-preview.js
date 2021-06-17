@@ -307,6 +307,7 @@
             const item = query('GET_ITEM', id); // don't do anything while not an video or audio file or hidden
 
             if (
+              !item ||
               (!isPreviewableVideo(item.file) &&
                 !isPreviewableAudio(item.file)) ||
               root.rect.element.hidden
