@@ -1,5 +1,5 @@
 /*!
- * FilePondPluginMediaPreview 1.0.10
+ * FilePondPluginMediaPreview 1.0.11
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit undefined for details.
  */
@@ -330,4 +330,4 @@ if (isBrowser) {
   );
 }
 
-export default plugin;
+export { plugin as default };
