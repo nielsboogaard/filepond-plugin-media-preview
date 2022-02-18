@@ -38,6 +38,17 @@ document.body.appendChild(pond.element);
 ```
  The preview will become active when uploading an video or audio file.
 
+## Configuration
+
+Both the video and audio preview can be enabled or disabled. Use the following options:
+```js
+const pond = FilePond.create({
+    name: 'filepond',
+    allowVideoPreview: true,    // default true
+    allowAudioPreview: true     // default true
+});
+```
+
 ## Default styles
 Be sure to include this lib's styles, by importing the minified css.
 ```js
