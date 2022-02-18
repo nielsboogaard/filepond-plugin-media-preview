@@ -27,6 +27,7 @@
     <div class="demo">
         <h3>Media Preview plugin for FilePond demo</h3>
         <input type="file" multiple="true"/>
+        <a onclick="toggle('video')">Toggle video preview</a> | <a onclick="toggle('audio')">Toggle audio preview</a><br>
         <a href="https://github.com/nielsboogaard/filepond-plugin-media-preview">Return to the source code</a>
     </div>
     
@@ -40,28 +41,47 @@
         // Get a reference to the file input element
         const inputElement = document.querySelector('input[type="file"]');
 
-        // Create the FilePond instance
-        const pond = FilePond.create(inputElement, {
-            files: [
-                {
-                    source: 'source',
-                    options: {
-                        type: 'local',
-                        // Mock file information
-                        file: {
-                            name: 'BigBuckBunny.mp4',
-                            size: 158334976,
-                            type: 'video/mp4',
-                            url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-                            mock: true, // Should be set to true to avoid full file preloading before showing preview
+        let allowVideoPreview = true;
+        let allowAudioPreview = true;
+
+        function toggle(toggleType) {
+            if (toggleType === 'video') {
+                allowVideoPreview = !allowVideoPreview;
+            } else {
+                allowAudioPreview = !allowAudioPreview;
+            }
+            FilePond.destroy(inputElement);
+            init();
+        }
+
+        function init() {
+            // Create the FilePond instance
+            const pond = FilePond.create(inputElement, {
+                allowVideoPreview: allowVideoPreview,
+                allowAudioPreview: allowAudioPreview,
+                files: [
+                    {
+                        source: 'source',
+                        options: {
+                            type: 'local',
+                            // Mock file information
+                            file: {
+                                name: 'BigBuckBunny.mp4',
+                                size: 158334976,
+                                type: 'video/mp4',
+                                url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                                mock: true, // Should be set to true to avoid full file preloading before showing preview
+                            }
                         }
                     }
-                }
-            ]
-        });
-        
-        pond.addFile('./goodmorning.mp4');
-        pond.addFile('./woodpecker.mp3');
+                ]
+            });
+
+            pond.addFile('./goodmorning.mp4');
+            pond.addFile('./woodpecker.mp3');
+        }
+
+        init();
     </script>
 
 </body>

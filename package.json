@@ -1,6 +1,6 @@
 {
     "name": "filepond-plugin-media-preview",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "Media preview Plugin for FilePond",
     "license": "MIT",
     "author": {
@@ -35,8 +35,10 @@
         "@babel/core": "^7.14.6",
         "@babel/preset-env": "^7.14.5",
         "autoprefixer": "^10.2.6",
-        "cssnano": "^5.0.6",
         "css-what": ">=5.0.1",
+        "cssnano": "^5.0.6",
+        "dot-prop": ">=6.0.1",
+        "lodash": ">=4.17.21",
         "node-sass": "^7.0.0",
         "postcss": "^8.3.5",
         "postcss-cli": "8.3.1",
@@ -48,8 +50,6 @@
         "rollup-plugin-node-resolve": "^5.2.0",
         "rollup-plugin-prettier": "^2.1.0",
         "rollup-plugin-terser": "^7.0.2",
-        "trim-newlines": ">=3.0.1",
-        "dot-prop": ">=6.0.1",
-        "lodash": ">=4.17.21"
+        "trim-newlines": ">=3.0.1"
     }
 }

@@ -1,5 +1,5 @@
 /*!
- * FilePondPluginMediaPreview 1.0.9
+ * FilePondPluginMediaPreview 1.0.10
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit undefined for details.
  */
@@ -266,11 +266,14 @@ const plugin = (fpAPI) => {
     const didLoadItem = ({ root, props }) => {
       const { id } = props;
       const item = query('GET_ITEM', id);
+      const allowVideoPreview = query('GET_ALLOW_VIDEO_PREVIEW');
+      const allowAudioPreview = query('GET_ALLOW_AUDIO_PREVIEW');
 
       if (
         !item ||
         item.archived ||
-        (!isPreviewableVideo(item.file) && !isPreviewableAudio(item.file))
+        ((!isPreviewableVideo(item.file) || !allowVideoPreview) &&
+          (!isPreviewableAudio(item.file) || !allowAudioPreview))
       ) {
         return;
       }
@@ -293,12 +296,14 @@ const plugin = (fpAPI) => {
         ({ root, props }) => {
           const { id } = props;
           const item = query('GET_ITEM', id);
+          const allowVideoPreview = root.query('GET_ALLOW_VIDEO_PREVIEW');
+          const allowAudioPreview = root.query('GET_ALLOW_AUDIO_PREVIEW');
 
-          // don't do anything while not an video or audio file or hidden
+          // don't do anything while not a video or audio file or hidden
           if (
             !item ||
-            (!isPreviewableVideo(item.file) &&
-              !isPreviewableAudio(item.file)) ||
+            ((!isPreviewableVideo(item.file) || !allowVideoPreview) &&
+              (!isPreviewableAudio(item.file) || !allowAudioPreview)) ||
             root.rect.element.hidden
           )
             return;
