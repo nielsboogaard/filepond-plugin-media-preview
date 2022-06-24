@@ -132,14 +132,33 @@ const createMediaView = (_) =>
     tag: 'div',
     ignoreRect: true,
     create: ({ root, props }) => {
-      const { id } = props;
+      // request mediaElementAttributes option
+      const attributes = root.query('GET_MEDIA_ELEMENT_ATTRIBUTES');
+
+      // get all keys from attributes object
+      const attrsList = Object.keys(attributes);
 
       // get item
       const item = root.query('GET_ITEM', { id: props.id });
       let tagName = isPreviewableAudio(item.file) ? 'audio' : 'video';
 
       root.ref.media = document.createElement(tagName);
-      root.ref.media.setAttribute('controls', true);
+
+      // map through all given attributes and set'em
+      attrsList.forEach((attribute) => {
+        // null and false attributes' values won't be passed
+        // as soon as text is considered as truthy value and false
+        // being passed in setAttribute will be converted to string.
+        // Note: 0 is false, but it still can be treated as truthy value.
+        if (
+          typeof attributes[attribute] === 'undefined' ||
+          attributes[attribute] === null
+        )
+          return;
+
+        root.ref.media.setAttribute(attribute, attributes[attribute]);
+      });
+
       root.element.appendChild(root.ref.media);
 
       if (isPreviewableAudio(item.file)) {
@@ -165,8 +184,6 @@ const createMediaView = (_) =>
     },
     write: _.utils.createRoute({
       DID_MEDIA_PREVIEW_LOAD: ({ root, props }) => {
-        const { id } = props;
-
         // get item
         const item = root.query('GET_ITEM', { id: props.id });
         if (!item) return;
@@ -250,6 +267,7 @@ const createMediaWrapperView = (_) => {
 const plugin = (fpAPI) => {
   const { addFilter, utils } = fpAPI;
   const { Type, createRoute } = utils;
+
   const mediaWrapperView = createMediaWrapperView(fpAPI);
 
   // called for each view that is created right after the 'create' method
@@ -317,6 +335,7 @@ const plugin = (fpAPI) => {
     options: {
       allowVideoPreview: [true, Type.BOOLEAN],
       allowAudioPreview: [true, Type.BOOLEAN],
+      mediaElementAttributes: [{ controls: true }, Type.OBJECT],
     },
   };
 };
