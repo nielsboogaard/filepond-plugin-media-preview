@@ -6,13 +6,14 @@ export const createMediaWrapperView = _ => {
      * Write handler for when preview container has been created
      */
     const didCreatePreviewContainer = ({ root, props }) => {
-        const { id } = props;
+        const { id, mediaPreviewHeight } = props;
         const item = root.query('GET_ITEM', id);
         if (!item) return;
 
         // the preview is now ready to be drawn
         root.dispatch('DID_MEDIA_PREVIEW_LOAD', {
-            id
+            id,
+            mediaPreviewHeight
         });
     };
 
@@ -25,7 +26,8 @@ export const createMediaWrapperView = _ => {
         // append media presenter
         root.ref.media = root.appendChildView(
             root.createChildView(media, {
-                id: props.id
+                id: props.id,
+                mediaPreviewHeight: props.mediaPreviewHeight
             })
         );
     };

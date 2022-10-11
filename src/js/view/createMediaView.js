@@ -11,7 +11,7 @@ export const createMediaView = _ =>
             const { id } = props;
 
             // get item
-            const item = root.query('GET_ITEM', { id: props.id });
+            const item = root.query('GET_ITEM', { id: props.id, mediaPreviewHeight: props.mediaPreviewHeight });
             let tagName = isPreviewableAudio(item.file) ? 'audio' : 'video';
 
             root.ref.media = document.createElement(tagName);
@@ -41,7 +41,7 @@ export const createMediaView = _ =>
         },
         write: _.utils.createRoute({
             DID_MEDIA_PREVIEW_LOAD: ({ root, props }) => {
-                const {id} = props;
+                const {id, mediaPreviewHeight} = props;
 
                 // get item
                 const item = root.query('GET_ITEM', {id: props.id});
@@ -61,7 +61,10 @@ export const createMediaView = _ =>
                 // determine dimensions and update panel accordingly
                 root.ref.media.addEventListener('loadeddata', () => {
                     let height = 75; // default height for audio panel
-                    if (isPreviewableVideo(item.file)) {
+                    if (isPreviewableVideo(item.file) && mediaPreviewHeight) {
+                        height = mediaPreviewHeight;
+                        root.element.querySelector('video').setAttribute('height', height);
+                    } else {
                         let containerWidth = root.ref.media.offsetWidth;
                         let factor = root.ref.media.videoWidth / containerWidth;
                         height = root.ref.media.videoHeight / factor;
