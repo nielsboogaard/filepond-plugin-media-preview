@@ -28,6 +28,7 @@ const plugin = fpAPI => {
             const item = query('GET_ITEM', id);
             const allowVideoPreview = query('GET_ALLOW_VIDEO_PREVIEW');
             const allowAudioPreview = query('GET_ALLOW_AUDIO_PREVIEW');
+            const mediaPreviewHeight = query('GET_MEDIA_PREVIEW_HEIGHT');
 
             if (!item || item.archived || ((!isPreviewableVideo(item.file) || !allowVideoPreview) && (!isPreviewableAudio(item.file) || !allowAudioPreview))) {
                 return;
@@ -35,7 +36,7 @@ const plugin = fpAPI => {
 
             // set preview view
             root.ref.mediaPreview = view.appendChildView(
-                view.createChildView(mediaWrapperView, { id })
+                view.createChildView(mediaWrapperView, { id, mediaPreviewHeight })
             );
 
             // now ready
@@ -62,7 +63,8 @@ const plugin = fpAPI => {
     return {
         options: {
             allowVideoPreview: [true, Type.BOOLEAN],
-            allowAudioPreview: [true, Type.BOOLEAN]
+            allowAudioPreview: [true, Type.BOOLEAN],
+            mediaPreviewHeight: [undefined, Type.STRING]
         }
     };
 };
